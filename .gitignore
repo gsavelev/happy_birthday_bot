@@ -1,2 +1,5 @@
+.DS_Store
+
 .idea/*
-.env
+creds/*
+ss/__pycache__/*
