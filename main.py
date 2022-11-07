@@ -28,8 +28,8 @@ def ping(message):
 @bot.message_handler(commands=['start', 'help'])
 def start(message):
     # TODO just for test
-    p = Parser()
-    birthday_guys = p.parse()
+    parser = Parser()
+    birthday_guys = parser.parse()
     for guy in birthday_guys:
         name = guy[0]
         tg = guy[1]
