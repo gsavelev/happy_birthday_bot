@@ -17,7 +17,7 @@ if os.path.exists(dotenv_path):
 else:
     raise FileNotFoundError('Did not find the environment file')
 
-TOKEN = os.getenv('PG_TOKEN')
+TOKEN = os.getenv('TOKEN')
 bot = TeleBot(TOKEN)
 
 
@@ -40,39 +40,39 @@ def ping(message):
 
 @bot.message_handler(commands=['start'])
 def start(message):
-    if message.chat.type == 'private':
-        if message.chat.id == int(os.getenv('ADMIN')):
-            greeting = '🫡'
-            report = 'Включил поздравлялку'
-            bot.send_message(message.chat.id, greeting)
-            time.sleep(1)
-            bot.send_message(message.chat.id, report)
-            # TODO change to every day
-            # schedule.every().day.at('12:00').do(job)
-            schedule.every(5).seconds.do(job)
-            while True:
-                schedule.run_pending()
-                if not schedule.jobs:
-                    break
+    if len(schedule.jobs) == 0:
+        if message.chat.type == 'private':
+            if message.chat.id == int(os.getenv('ADMIN')):
+                greeting = '🫡'
+                report = 'Включил поздравлялку'
+                bot.send_message(message.chat.id, greeting)
                 time.sleep(1)
-        else:
-            msg = 'Сори, я подчиняюсь только админу!\nСпроси во флуде, кто админ.'
-            bot.send_message(message.chat.id, msg)
+                bot.send_message(message.chat.id, report)
+                schedule.every().day.at('10:00').do(job)
+                while True:
+                    schedule.run_pending()
+                    if not schedule.jobs:
+                        break
+                    time.sleep(1)
+            else:
+                msg = 'Сори, я подчиняюсь только админу!\nСпроси во флуде, кто админ.'
+                bot.send_message(message.chat.id, msg)
 
 
 @bot.message_handler(commands=['stop'])
 def stop(message):
-    if message.chat.type == 'private':
-        if message.chat.id == int(os.getenv('ADMIN')):
-            greeting = '🫡'
-            report = 'Выключил поздравлялку'
-            bot.send_message(message.chat.id, greeting)
-            time.sleep(1)
-            bot.send_message(message.chat.id, report)
-            schedule.cancel_job(schedule.jobs[0])
-        else:
-            msg = 'Сорь, я подчиняюсь только админу!\nСпроси во флуде, кто админ.'
-            bot.send_message(message.chat.id, msg)
+    if len(schedule.jobs) > 0:  # any work exists
+        if message.chat.type == 'private':
+            if message.chat.id == int(os.getenv('ADMIN')):
+                greeting = '🫡'
+                report = 'Выключил поздравлялку'
+                bot.send_message(message.chat.id, greeting)
+                time.sleep(1)
+                bot.send_message(message.chat.id, report)
+                schedule.cancel_job(schedule.jobs[0])
+            else:
+                msg = 'Сори, я подчиняюсь только админу!\nСпроси во флуде, кто админ.'
+                bot.send_message(message.chat.id, msg)
 
 
 @bot.message_handler(commands=['help'])
