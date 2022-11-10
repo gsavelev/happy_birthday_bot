@@ -8,6 +8,7 @@ class SsConnector:
     """
     Connects Google Drive to read data from Google Spreadsheet
     """
+
     def __init__(self):
         self.scopes = ['https://www.googleapis.com/auth/spreadsheets',
                        'https://www.googleapis.com/auth/drive']

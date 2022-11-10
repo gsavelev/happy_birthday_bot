@@ -4,3 +4,4 @@ oauth2client==4.1.3
 pyTelegramBotAPI==4.7.1
 python-dotenv==0.21.0
 schedule==1.1.0
+balaboba~=2.0.0

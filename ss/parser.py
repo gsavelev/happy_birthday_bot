@@ -8,6 +8,7 @@ class Parser:
     """
     Parses Google Spreadsheet for useful data
     """
+
     def __init__(self):
         self.ss_connector = SsConnector()
         self.worksheet = self.ss_connector.get_worksheet()
@@ -28,7 +29,13 @@ class Parser:
         rows = self.find_birthday_rows()
         birthday_guys = list()
         for row in rows:
-            name = self.worksheet.get(f'A{row}')[0][0]  # get() returns list of lists
-            tg = self.worksheet.get(f'G{row}')[0][0]
+            try:
+                name = self.worksheet.get(f'A{row}')[0][0]  # get() returns list of lists
+            except IndexError:
+                name = None
+            try:
+                tg = self.worksheet.get(f'G{row}')[0][0]
+            except IndexError:
+                tg = None
             birthday_guys.append((name, tg))
         return birthday_guys
