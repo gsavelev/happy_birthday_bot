@@ -1,5 +1,6 @@
 import os
 import random
+import time
 
 from balaboba import Balaboba
 from bs4 import BeautifulSoup
@@ -69,6 +70,8 @@ class WishMaker:
         else:
             prompt = ' '.join(wish_words[:4])
         wish = self.bb.balaboba(prompt, intro=self.intro.number)
+        while not wish:  # waiting for the balaboba to finish its work
+            time.sleep(1)
         end = random.choice(['\n\nНакидайте стикеросов!',
                              '\n\nВыпускайте собак!',
                              '\n\nКидайте собак!'])

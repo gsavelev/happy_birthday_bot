@@ -17,6 +17,8 @@ if os.path.exists(dotenv_path):
 else:
     raise FileNotFoundError('Did not find the environment file')
 
+ADMIN = os.getenv('ADMIN')
+TARGET_CHAT = os.getenv('TARGET_CHAT')
 TOKEN = os.getenv('TOKEN')
 bot = TeleBot(TOKEN)
 
@@ -26,9 +28,8 @@ def job():
     birthday_guys = parser.parse()
     wish_maker = WishMaker()
     wish = wish_maker.make_wish(birthday_guys)
-    target_chat_id = os.getenv('TARGET_CHAT')
     if wish:
-        bot.send_message(target_chat_id, wish)
+        bot.send_message(TARGET_CHAT, wish)
 
 
 @bot.message_handler(commands=['ping'])
@@ -42,7 +43,7 @@ def ping(message):
 def start(message):
     if len(schedule.jobs) == 0:
         if message.chat.type == 'private':
-            if message.chat.id == int(os.getenv('ADMIN')):
+            if message.chat.id == int(ADMIN):
                 greeting = '🫡'
                 report = 'Включил поздравлялку'
                 bot.send_message(message.chat.id, greeting)
@@ -63,7 +64,7 @@ def start(message):
 def stop(message):
     if len(schedule.jobs) > 0:  # any work exists
         if message.chat.type == 'private':
-            if message.chat.id == int(os.getenv('ADMIN')):
+            if message.chat.id == int(ADMIN):
                 greeting = '🫡'
                 report = 'Выключил поздравлялку'
                 bot.send_message(message.chat.id, greeting)
@@ -78,7 +79,7 @@ def stop(message):
 @bot.message_handler(commands=['help'])
 def help(message):
     if message.chat.type == 'private'\
-            and message.chat.id == int(os.getenv('ADMIN')):
+            and message.chat.id == int(ADMIN):
         guide = 'Чтобы завести поздравлялку скомандуй /start'
         bot.send_message(message.chat.id, guide)
 
